@@ -1,0 +1,294 @@
+openapi: "3.0.0"
+info:
+  version: 1.0.0
+  title: Finch
+servers:
+  - url: 'https://api.tryfinch.com'
+tags:
+  - name: Finch
+
+paths:
+  /auth/token:
+    post:
+      security:
+        - basicAuth: []
+      tags:
+        - Finch
+      summary: Auth code exchange
+      operationId: authCodeExchange
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: './components.yml#/AccessTokenRequest'
+      responses:
+        200:
+          description: Access token
+          content:
+            application/json:
+              schema:
+                $ref: './components.yml#/AccessToken'
+        400:
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: './components.yml#/RequestError'
+
+  /employer/deduction/company/create:
+    post:
+      security:
+        - bearerAuth: []
+      tags:
+        - Finch
+      summary: Create company level deduction
+      operationId: createDeduction
+      parameters:
+        - name: Finch-API-Version
+          in: header
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: './components.yml#/DeductionRequest'
+      responses:
+        200:
+          description: Finch deduction id
+          content:
+            application/json:
+              schema:
+                $ref: './components.yml#/DeductionId'
+
+  /employer/directory:
+    get:
+      security:
+        - bearerAuth: []
+      tags:
+        - Finch
+      summary: Get company directory
+      operationId: getCompanyDirectory
+      parameters:
+        - name: limit
+          in: query
+          required: false
+          schema:
+            type: integer
+            format: int64
+        - name: offset
+          in: query
+          required: false
+          schema:
+            type: integer
+            format: int64
+        - name: Finch-API-Version
+          in: header
+          required: true
+          schema:
+            type: string
+      responses:
+        200:
+          description: Company directory
+          content:
+            application/json:
+              schema:
+                $ref: './components.yml#/CompanyDirectory'
+
+  /employer/individual:
+    post:
+      security:
+        - bearerAuth: []
+      tags:
+        - Finch
+      summary: Get individuals
+      operationId: getIndividuals
+      parameters:
+        - name: Finch-API-Version
+          in: header
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: './components.yml#/IndividualRequest'
+      responses:
+        200:
+          description: Individual data
+          content:
+            application/json:
+              schema:
+                $ref: './components.yml#/IndividualResponse'
+
+  /employer/deduction/individual/create:
+    post:
+      security:
+        - bearerAuth: []
+      tags:
+        - Finch
+      summary: Create individual deduction
+      operationId: createIndividualDeduction
+      parameters:
+        - name: Finch-API-Version
+          in: header
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: './components.yml#/IndividualDeductionRequest'
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+
+  /employer/payment:
+    get:
+      security:
+        - bearerAuth: []
+      tags:
+        - Finch
+      summary: Get individual payments
+      operationId: getIndividualPayments
+      parameters:
+        - name: start_date
+          in: query
+          required: true
+          schema:
+            type: string
+        - name: end_date
+          in: query
+          required: true
+          schema:
+            type: string
+        - name: Finch-API-Version
+          in: header
+          required: true
+          schema:
+            type: string
+      responses:
+        200:
+          description: Payments
+          content:
+            application/json:
+              schema:
+                $ref: './components.yml#/Payments'
+
+  /employer/pay-statement:
+    post:
+      security:
+        - bearerAuth: [ ]
+      tags:
+        - Finch
+      summary: Read detailed pay statements for each individual
+      operationId: readPayStatements
+      parameters:
+        - name: Finch-API-Version
+          in: header
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: './components.yml#/PayStatementRequest'
+      responses:
+        200:
+          description: Payments
+          content:
+            application/json:
+              schema:
+                $ref: './components.yml#/PayStatements'
+
+  # external
+  /employers/{employerId}/finchIntegrationUrl:
+    get:
+      tags:
+        - Finch
+      summary: Get link for integration with Finch
+      operationId: getFinchIntegrationUrl
+      parameters:
+        - name: employerId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        200:
+          description: Finch Integration Url
+          content:
+            application/json:
+              schema:
+                $ref: './components.yml#/FinchVM'
+        400:
+          description: Bad request
+          content: { }
+        401:
+          description: Unauthorized
+          content: { }
+        403:
+          description: Forbidden
+          content: { }
+        404:
+          description: Not found
+          content: { }
+
+  /employers/{employerId}/finchAccessToken:
+    get:
+      tags:
+        - Finch
+      summary: Get access token for integration with Finch
+      operationId: getFinchAccessToken
+      parameters:
+        - name: employerId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        200:
+          description: Finch Access Token
+          content:
+            application/json:
+              schema:
+                $ref: './components.yml#/AccessToken'
+        400:
+          description: Bad request
+          content: { }
+        401:
+          description: Unauthorized
+          content: { }
+        403:
+          description: Forbidden
+          content: { }
+        404:
+          description: Not found
+          content: { }
+
+components:
+  securitySchemes:
+    basicAuth:
+      type: http
+      scheme: basic
+
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+    <appender name="stdout_plain" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>%date{yyyy-MM-dd HH:mm:ss z} | thread=%thread | loglevel=%highlight(%level) | logger=%logger{36}.%M:%L | %highlight(%msg%n)</pattern>
+        </encoder>
+    </appender>
+
+    <appender name="stdout_plain_async"
+              class="ch.qos.logback.classic.AsyncAppender">
+        <appender-ref ref="stdout_plain" />
+        <includeCallerData>false</includeCallerData><!-- default false -->
+        <neverBlock>true</neverBlock><!-- default false, set to true to cause the
+            Appender not block the application and just drop the messages -->
+    </appender>
+
+    <root level="info">
+        <springProfile name="local | !local">
+            <appender-ref ref="stdout_plain_async"/>
+        </springProfile>
+    </root>
+</configuration>

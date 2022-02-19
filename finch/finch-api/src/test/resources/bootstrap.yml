@@ -1,0 +1,15 @@
+spring:
+  application:
+    name: "finch"
+
+aws:
+  secretsmanager:
+    enabled: false
+
+cloud:
+  aws:
+    credentials:
+      use-default-aws-credentials-chain: true
+      instance-profile: true
+    stack:
+      auto: false

@@ -1,0 +1,20 @@
+spring:
+  application:
+    name: "finch"
+
+aws:
+  secretsmanager:
+    prefix: secret
+    defaultContext: finch
+    profileSeparator: /
+    name: finch
+    region: us-west-2
+    fail-fast: false
+
+cloud:
+  aws:
+    credentials:
+      use-default-aws-credentials-chain: true
+      instance-profile: true
+    stack:
+      auto: false

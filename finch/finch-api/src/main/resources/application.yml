@@ -1,0 +1,40 @@
+management:
+  endpoints:
+    web:
+      base-path: /
+      exposure:
+        include: "health,metrics,prometheus"
+
+spring:
+  r2dbc:
+    url: r2dbc:pool:postgresql://localhost:5432/finch
+    username: postgres
+    password: postgres
+  jooq:
+    sql-dialect: postgres
+
+amazon:
+  awsRegion: us-west-2
+
+jobs:
+  cron:
+    map-finch-employees: 0 30 1 * * * # every day at 1:30 a.m.
+  interval:
+    token-expiring: 3600000 # every hour
+    process-deductions: 3600000 # every hour
+
+grpc:
+  server:
+    port: 9897
+    enable-keep-alive: true
+  client:
+    hsa-server:
+      address: static://127.0.0.1:9899
+
+finch:
+  clientId:
+  clientSecret:
+  finchUrl:
+  finchAuthUrl: 'https://connect.tryfinch.com/authorize'
+  apiVersion:
+  isSandbox:

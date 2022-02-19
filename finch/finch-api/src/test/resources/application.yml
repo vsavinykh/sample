@@ -1,0 +1,33 @@
+management:
+  endpoints:
+    web:
+      base-path: /
+      exposure:
+        include: "health,metrics,prometheus"
+
+amazon:
+  awsRegion: us-west-2
+
+spring:
+  main:
+    allow-bean-definition-overriding: true
+
+jobs:
+  cron:
+    map-finch-employees: 0 30 1 * * * # every day at 1:30 a.m.
+  interval:
+    token-expiring: 3600000 # every hour
+    process-deductions: 3600000 # every hour
+
+finch:
+  clientId: test
+  clientSecret: test
+  finchUrl: test
+  finchAuthUrl: 'https://connect.tryfinch.com/authorize'
+  apiVersion: 2020-09-17
+  isSandbox: true
+
+finchQueue: test
+logging:
+  level:
+    root: INFO

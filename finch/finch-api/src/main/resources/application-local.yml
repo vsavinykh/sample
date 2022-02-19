@@ -1,0 +1,10 @@
+management:
+  endpoints:
+    web:
+      base-path: /
+
+server:
+  port: 8081
+
+amazon:
+  localAwsProfile: "lanehealth"

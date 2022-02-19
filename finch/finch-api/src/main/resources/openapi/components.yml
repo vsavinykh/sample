@@ -1,0 +1,344 @@
+AccessTokenRequest:
+  type: object
+  properties:
+    code:
+      type: string
+    redirect_uri:
+      type: string
+  required:
+    - code
+    - redirect_uri
+
+AccessToken:
+  type: object
+  properties:
+    access_token:
+      type: string
+
+DeductionRequest:
+  type: object
+  properties:
+    name:
+      type: string
+    type:
+      type: string
+    frequency:
+      type: string
+  required:
+    - name
+    - type
+    - frequency
+
+DeductionId:
+  type: object
+  properties:
+    id:
+      type: string
+
+CompanyDirectory:
+  type: object
+  properties:
+    paging:
+      type: object
+      properties:
+        count:
+          type: integer
+          format: int64
+        offset:
+          type: integer
+          format: int64
+    individuals:
+      type: array
+      items:
+        type: object
+        properties:
+          id:
+            type: string
+          first_name:
+            type: string
+          middle_name:
+            type: string
+          last_name:
+            type: string
+          manager:
+            type: object
+            properties:
+              id:
+                type: string
+          department:
+            type: object
+            properties:
+              name:
+                type: string
+          is_active:
+            type: boolean
+
+IndividualRequest:
+  type: object
+  properties:
+    options:
+      type: object
+      properties:
+        include:
+          type: array
+          items:
+            type: string
+    requests:
+      type: array
+      items:
+        type: object
+        properties:
+          individual_id:
+            type: string
+        required:
+          - individual_id
+  required:
+    - requests
+
+IndividualResponse:
+  type: object
+  properties:
+    responses:
+      type: array
+      items:
+        type: object
+        properties:
+          individual_id:
+            type: string
+          code:
+            type: integer
+            format: int64
+          body:
+            type: object
+            properties:
+              id:
+                type: string
+              first_name:
+                type: string
+              middle_name:
+                type: string
+              last_name:
+                type: string
+              emails:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    data:
+                      type: string
+                    type:
+                      type: string
+              phone_numbers:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    data:
+                      type: string
+                    type:
+                      type: string
+              dob:
+                type: string
+              residence:
+                type: object
+                properties:
+                  line1:
+                    type: string
+                  line2:
+                    type: string
+                  city:
+                    type: string
+                  state:
+                    type: string
+                  postal_code:
+                    type: string
+                  country:
+                    type: string
+              ssn:
+                type: string
+
+IndividualDeductionRequest:
+  type: object
+  properties:
+    deduction_id:
+      type: string
+    individual_id:
+      type: string
+    employee_deduction:
+      type: object
+      properties:
+        amount:
+          type: integer
+          format: int64
+        type:
+          type: string
+      required:
+        - amount
+        - type
+    company_contribution:
+      type: object
+      properties:
+        amount:
+          type: string
+        type:
+          type: string
+      required:
+        - amount
+        - type
+  required:
+    - deduction_id
+    - individual_id
+    - employee_deduction
+
+Payments:
+  type: array
+  items:
+    $ref: '#/Payment'
+
+Payment:
+  type: object
+  properties:
+    id:
+      type: string
+    pay_period:
+      type: object
+      properties:
+        start_date:
+          type: string
+        end_date:
+          type: string
+    pay_date:
+      type: string
+    debit_date:
+      type: string
+    company_debit:
+      type: object
+      properties:
+        amount:
+          type: integer
+          format: int64
+        currency:
+          type: string
+    gros_pay:
+      type: object
+      properties:
+        amount:
+          type: integer
+          format: int64
+        currency:
+          type: string
+    net_day:
+      type: object
+      properties:
+        amount:
+          type: integer
+          format: int64
+        currency:
+          type: string
+    employer_taxes:
+      type: object
+      properties:
+        amount:
+          type: integer
+          format: int64
+        currency:
+          type: string
+    employee_taxes:
+      type: object
+      properties:
+        amount:
+          type: integer
+          format: int64
+        currency:
+          type: string
+    individual_ids:
+      type: array
+      items:
+        type: string
+
+FinchVM:
+  type: object
+  properties:
+    url:
+      type: string
+
+RequestError:
+  type: object
+  properties:
+    statusCode:
+      type: integer
+      format: int32
+    status:
+      type: integer
+      format: int32
+    code:
+      type: integer
+      format: int32
+    message:
+      type: string
+    name:
+      type: string
+
+PayStatementRequest:
+  type: object
+  properties:
+    requests:
+      type: array
+      items:
+        type: object
+        properties:
+          payment_id:
+            type: string
+        required:
+          - payment_id
+  required:
+    - requests
+
+PayStatements:
+  type: object
+  properties:
+    responses:
+      type: array
+      items:
+        type: object
+        properties:
+          payment_id:
+            type: string
+          body:
+            type: object
+            properties:
+              pay_statements:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    individual_id:
+                      type: string
+                    employee_deductions:
+                      type: array
+                      items:
+                        type: object
+                        properties:
+                          name:
+                            type: string
+                          amount:
+                            type: integer
+                            format: int64
+                          currency:
+                            type: string
+                          pre_tax:
+                            type: boolean
+                          type:
+                            type: string
+                    employer_contributions:
+                      type: array
+                      items:
+                        type: object
+                        properties:
+                          name:
+                            type: string
+                          amount:
+                            type: integer
+                            format: int64
+                          currency:
+                            type: string
